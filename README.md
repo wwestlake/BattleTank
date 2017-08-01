@@ -7,3 +7,6 @@ Open world head to head tank fight with AI, terrain, and advanced control system
 4. Second Player / AI
 5. User Interface
 
+## Status of Development
+1. Just starting status will be updated
+
