@@ -39,4 +39,22 @@ ATank* ATankAIController::GetPlayerTank() const
 	return nullptr;
 }
 
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	auto PlayerTank = GetPlayerTank();
+	auto ControlledTank = GetControlledTank();
+	if (PlayerTank != nullptr && ControlledTank != nullptr) 
+	{
+		// TODO Move toward player
+
+		// Aim at the player
+		ControlledTank->AimAt(PlayerTank->GetActorLocation());
+
+		// Fire: If in range and gun ready
+
+	}
+}
+
 

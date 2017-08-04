@@ -17,6 +17,23 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	
 public:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	ATank* GetControlledTank() const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
+	float CrossHairXLocation = 0.5f;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
+	float CrossHairYLocation = 0.33333;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
+	float LineTraceRange = 1000000.0f;
+
+
+private:
+	void AimTowardCrossHair();
+	bool GetSightRayHitLocation(FVector& location) const;
+	bool GetLookDirection(FVector& LookDirection) const;
+	bool GetLookVectorHitLocation(FVector& HitLocation, FVector LookDirection) const;
+
 };
