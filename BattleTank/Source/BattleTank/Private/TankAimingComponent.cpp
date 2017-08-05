@@ -34,11 +34,18 @@ void UTankAimingComponent::AimAt(FVector location, float LaunchSpeed)
 	FVector tossVelocity;
 	FVector aimDirection;
 
-	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, tossVelocity, barrelLocation, location, LaunchSpeed, ESuggestProjVelocityTraceOption::DoNotTrace);
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, tossVelocity, barrelLocation, location, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
 	if (bHaveAimSolution)
 	{
 		aimDirection = tossVelocity.GetSafeNormal();
 		MoveBarrelTowards(aimDirection);
+		auto Time = GetWorld()->GetTimeSeconds();
+
+		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found: %s"), Time, *aimDirection.ToString());
+	}
+	else {
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: No solution"), Time);
 	}
 
 }
