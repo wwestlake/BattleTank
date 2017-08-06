@@ -21,15 +21,15 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f;
 
 	// Maximum firing rate in seconds
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float MaxFiringRate = 3.0f;
 
 	// Maximum firing rate in seconds
-	UPROPERTY(EditAnyWhere, Category = Firing)
+	UPROPERTY(EditAnyWhere, Category = "Firing")
 		bool EnableFiringMode = true;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -54,7 +54,7 @@ public:
 private:
 
 
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBluePrint;
 
 

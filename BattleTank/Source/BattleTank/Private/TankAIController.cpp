@@ -19,7 +19,7 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
 
 
-	if (PlayerTank != nullptr && ControlledTank != nullptr) 
+	if (ensure(PlayerTank != nullptr && ControlledTank != nullptr)) 
 	{
 		// Move toward player
 

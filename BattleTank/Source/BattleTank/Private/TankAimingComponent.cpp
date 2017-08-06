@@ -26,7 +26,7 @@ void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * T
 
 void UTankAimingComponent::GetProjectileStart(FVector& Location, FRotator& Rotation)
 {
-	if (Barrel != nullptr) {
+	if (ensure(Barrel != nullptr)) {
 		Location = Barrel->GetSocketLocation(FName("Projectile"));
 		Rotation = Barrel->GetSocketRotation(FName("Projectile"));
 	}
@@ -35,26 +35,22 @@ void UTankAimingComponent::GetProjectileStart(FVector& Location, FRotator& Rotat
 
 void UTankAimingComponent::AimAt(FVector location, float LaunchSpeed) 
 {
-	if (Barrel == nullptr ||  Turret == nullptr) 
-	{ 
-		UE_LOG(LogTemp, Error, TEXT("Missing turret or barrel reference"));
-		return;
-	}
-
-	auto OurTank = Cast<ATank>(GetOwner());
-	auto OurTankName = OurTank->GetName();
-	auto barrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
-
-	FVector tossVelocity;
-	FVector aimDirection;
-
-	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, tossVelocity, barrelLocation, location, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
-	if (bHaveAimSolution)
+	if (ensure(Barrel != nullptr &&  Turret != nullptr))
 	{
-		aimDirection = tossVelocity.GetSafeNormal();
-		MoveBarrelTowards(aimDirection);
-	}
+		auto OurTank = Cast<ATank>(GetOwner());
+		auto OurTankName = OurTank->GetName();
+		auto barrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
+		FVector tossVelocity;
+		FVector aimDirection;
+
+		bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, tossVelocity, barrelLocation, location, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
+		if (bHaveAimSolution)
+		{
+			aimDirection = tossVelocity.GetSafeNormal();
+			MoveBarrelTowards(aimDirection);
+		}
+	}
 }
 
 
@@ -66,7 +62,9 @@ void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection)
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = aimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
-
-	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->Rotate(DeltaRotator.Yaw);
+	if (ensure(Barrel != nullptr && Turret != nullptr)) 
+	{
+		Barrel->Elevate(DeltaRotator.Pitch);
+		Turret->Rotate(DeltaRotator.Yaw);
+	}
 }

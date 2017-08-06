@@ -21,15 +21,15 @@ public:
 
 private:
 	// Maximumnet movement speed in degrees per second
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		float MaxDegreesPerSecond = 10;
 
 	// Maximum elevation angle in degrees
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		float MaxElevationDegrees = 45;
 
 	// Minimum elevation angle in degrees
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		float MinElevationDegrees = 0;
 
 

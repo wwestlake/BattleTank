@@ -13,29 +13,32 @@ void UTankMovementComponent::Initialize(UTrackComponent* LeftTrackToSet, UTrackC
 
 void UTankMovementComponent::LeftThrottle(float throttle)
 {
-	if (LeftTrack == nullptr || RightTrack == nullptr) return;
-	LeftTrack->SetThrottle(throttle);
+	if (ensure(LeftTrack != nullptr && RightTrack != nullptr)) {
+		LeftTrack->SetThrottle(throttle);
+	}
 }
 
 void UTankMovementComponent::RightThrottle(float throttle)
 {
-	if (LeftTrack == nullptr || RightTrack == nullptr) return;
-	RightTrack->SetThrottle(throttle);
+	if (ensure(LeftTrack != nullptr && RightTrack != nullptr)) {
+		RightTrack->SetThrottle(throttle);
+	}
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	if (LeftTrack == nullptr || RightTrack == nullptr) return;
-	LeftTrack->SetThrottle(Throw);
-	RightTrack->SetThrottle(Throw);
-
+	if (ensure(LeftTrack != nullptr && RightTrack != nullptr)) {
+		LeftTrack->SetThrottle(Throw);
+		RightTrack->SetThrottle(Throw);
+	}
 }
 
 void UTankMovementComponent::IntendMoveTurn(float Throw)
 {
-	if (LeftTrack == nullptr || RightTrack == nullptr) return;
-	LeftTrack->SetThrottle(Throw);
-	RightTrack->SetThrottle(-Throw);
+	if (ensure(LeftTrack != nullptr && RightTrack != nullptr)) {
+		LeftTrack->SetThrottle(Throw);
+		RightTrack->SetThrottle(-Throw);
+	}
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
@@ -44,10 +47,6 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 	auto ForwardAmount = FVector::DotProduct(TankForward, AIForwardIntention);
 	auto TurnAmount = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
-
 	IntendMoveForward(ForwardAmount);
-
 	IntendMoveTurn(TurnAmount);
-
-
 }

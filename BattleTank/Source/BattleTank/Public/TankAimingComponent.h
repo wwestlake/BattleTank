@@ -7,6 +7,15 @@
 #include "Public/Math/Rotator.h"
 #include "TankAimingComponent.generated.h"
 
+
+UENUM()
+enum class EFiringState : uint8
+{
+	Reloading,
+	Aiming,
+	Locked
+};
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -19,14 +28,18 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-public:	
 	void AimAt(FVector location, float LaunchSpeed);
 	
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
 
-	UFUNCTION(BlueprintCallable, Category = Firing)
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void GetProjectileStart(FVector& Location, FRotator& Rotation);
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringState FiringStatus = EFiringState::Locked;
+
 
 private:
 	UTankBarrel* Barrel = nullptr;

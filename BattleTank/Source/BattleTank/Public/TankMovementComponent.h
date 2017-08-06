@@ -30,7 +30,7 @@ public:
 	void RightThrottle(float throttle);
 
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTrackComponent* LeftTrackToSet, UTrackComponent* RightTrackToSet);
 
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;

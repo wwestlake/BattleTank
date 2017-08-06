@@ -22,7 +22,7 @@ public:
 		void SetReverse(bool ReverseThrottleSetting);
 
 	// Max force for this track in Newtons
-	UPROPERTY(EditDefaultsOnly, Category = Settings)
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	float TrackMaxDrivingForce = 400000;
 
 private:

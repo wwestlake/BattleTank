@@ -5,6 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/PrimitiveComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "TankAimingComponent.h"
 
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -26,12 +27,10 @@ ATank* ATankPlayerController::GetControlledTank() const
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto tank = GetControlledTank();
-	if (tank == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("No Controlled Tank Found"))
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Found Controlled Tank: %s"), *tank->GetName());
+	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent != nullptr)) 
+	{
+		FoundAimingComponent(AimingComponent);
 	}
 }
 
