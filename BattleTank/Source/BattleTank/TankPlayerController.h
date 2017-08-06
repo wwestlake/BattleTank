@@ -20,13 +20,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	ATank* GetControlledTank() const;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float CrossHairXLocation = 0.5f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float CrossHairYLocation = 0.33333;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Targeting")
 	float LineTraceRange = 1000000.0f;
 
 

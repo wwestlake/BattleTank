@@ -9,6 +9,8 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
+class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -25,8 +27,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetTurretReference(UTankTurret* TurretToSet);
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 4000.0f;
+
+	// Maximum firing rate in seconds
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float MaxFiringRate = 3.0f;
+
+	// Maximum firing rate in seconds
+	UPROPERTY(EditAnyWhere, Category = Firing)
+		bool EnableFiringMode = true;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,7 +46,6 @@ protected:
 
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
-
 
 public:	
 
@@ -46,9 +57,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
+
 private:
 
 
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBluePrint;
 
+	// local pointer to Barrel for spawning projectile
+	UTankBarrel* Barrel = nullptr;
 
+	float ReloadTimeSeconds = 3.0f;
+	double LastFireTime = 0.0f;
 };

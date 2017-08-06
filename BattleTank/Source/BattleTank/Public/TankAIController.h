@@ -15,10 +15,10 @@ class BATTLETANK_API ATankAIController : public AAIController
 	
 public:
 	virtual void BeginPlay() override;
-	ATank* GetControlledTank() const;
-	ATank* GetPlayerTank() const;
 
 private:
 	virtual void Tick(float DeltaTime) override;
+
+	float fireRateCoolDown = 0.0f;
 
 };

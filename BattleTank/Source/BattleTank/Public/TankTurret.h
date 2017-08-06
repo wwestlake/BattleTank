@@ -21,7 +21,7 @@ public:
 
 private:
 	// Maximumnet movement speed in degrees per second
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MaxDegreesPerSecond = 25;
 
 	
