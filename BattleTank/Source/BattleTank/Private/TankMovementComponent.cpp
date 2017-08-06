@@ -7,17 +7,25 @@
 
 void UTankMovementComponent::Initialize(UTrackComponent* LeftTrackToSet, UTrackComponent* RightTrackToSet)
 {
-	if (LeftTrackToSet != nullptr || RightTrackToSet != nullptr) 
-	{
-		LeftTrack = LeftTrackToSet;
-		RightTrack = RightTrackToSet;
-	}
+	LeftTrack = LeftTrackToSet;
+	RightTrack = RightTrackToSet;
+}
+
+void UTankMovementComponent::LeftThrottle(float throttle)
+{
+	if (LeftTrack == nullptr || RightTrack == nullptr) return;
+	LeftTrack->SetThrottle(throttle);
+}
+
+void UTankMovementComponent::RightThrottle(float throttle)
+{
+	if (LeftTrack == nullptr || RightTrack == nullptr) return;
+	RightTrack->SetThrottle(throttle);
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: Forward move intention: %f"), Time, Throw);
+	if (LeftTrack == nullptr || RightTrack == nullptr) return;
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 
@@ -25,9 +33,7 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 
 void UTankMovementComponent::IntendMoveTurn(float Throw)
 {
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: Turn intention: %f"), Time, Throw);
-
+	if (LeftTrack == nullptr || RightTrack == nullptr) return;
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 }

@@ -23,8 +23,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void IntendMoveTurn(float Throw);
 
+	UFUNCTION(BlueprintCallable)
+	void LeftThrottle(float throttle);
+
+	UFUNCTION(BlueprintCallable)
+	void RightThrottle(float throttle);
+
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(UTrackComponent* LeftTrackToSet, UTrackComponent* RightTrackToSet);
+
 
 
 private:
