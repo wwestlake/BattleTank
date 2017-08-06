@@ -16,9 +16,15 @@ class BATTLETANK_API ATankAIController : public AAIController
 public:
 	virtual void BeginPlay() override;
 
+
+
 private:
 	virtual void Tick(float DeltaTime) override;
 
 	float fireRateCoolDown = 0.0f;
+
+	// How close the AI tank can get to the Player before it stops path finding
+	UPROPERTY(EditDefaultsOnly)
+	float AcceptanceRadius = 3000;
 
 };

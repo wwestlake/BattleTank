@@ -21,7 +21,9 @@ void ATankAIController::Tick(float DeltaTime)
 
 	if (PlayerTank != nullptr && ControlledTank != nullptr) 
 	{
-		// TODO Move toward player
+		// Move toward player
+
+		MoveToActor(PlayerTank, AcceptanceRadius); // TODO check radius is in cm
 
 		// Aim at the player
 		ControlledTank->AimAt(PlayerTank->GetActorLocation());
@@ -29,5 +31,4 @@ void ATankAIController::Tick(float DeltaTime)
 		ControlledTank->Fire();
 	}
 }
-
 

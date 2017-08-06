@@ -18,16 +18,20 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-
-void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
+void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
 	Turret = TurretToSet;
 }
+
+void UTankAimingComponent::GetProjectileStart(FVector& Location, FRotator& Rotation)
+{
+	if (Barrel != nullptr) {
+		Location = Barrel->GetSocketLocation(FName("Projectile"));
+		Rotation = Barrel->GetSocketRotation(FName("Projectile"));
+	}
+}
+
 
 void UTankAimingComponent::AimAt(FVector location, float LaunchSpeed) 
 {

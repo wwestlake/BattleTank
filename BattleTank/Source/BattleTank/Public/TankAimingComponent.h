@@ -18,12 +18,16 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	void SetTurretReference(UTankTurret* TurretToSet);
 
 public:	
 	void AimAt(FVector location, float LaunchSpeed);
 	
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void GetProjectileStart(FVector& Location, FRotator& Rotation);
+
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;

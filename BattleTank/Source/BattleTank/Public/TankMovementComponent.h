@@ -33,6 +33,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(UTrackComponent* LeftTrackToSet, UTrackComponent* RightTrackToSet);
 
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
 
 private:
