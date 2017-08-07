@@ -1,12 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
-#include "TankAimingComponent.h"
 #include "TankTurret.h"
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
-#include "TankMovementComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -20,7 +18,6 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 
@@ -31,28 +28,24 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ATank::AimAt(FVector location)
-{
-	auto OurTankName = GetName();
-	TankAimingComponent->AimAt(location, LaunchSpeed);
-}
-
+// TODO Fix Firing
 void ATank::Fire()
 {
-
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeSeconds;
-
-	FVector ProjectileStartLocation;
-	FRotator ProjectileStartRotation;
-
-	TankAimingComponent->GetProjectileStart(ProjectileStartLocation, ProjectileStartRotation);
-
-	if (isReloaded && EnableFiringMode) {
-		auto newProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluePrint, ProjectileStartLocation, ProjectileStartRotation);
-		newProjectile->LaunchProjectile(LaunchSpeed);
-		LastFireTime = FPlatformTime::Seconds();
-	}
-
+//	auto TankAimingComponent = FindComponentByClass<UTankAimingComponent>
+//	if (ensure(TankAimingComponent != nullptr)) {
+//		bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeSeconds;
+//
+//		FVector ProjectileStartLocation;
+//		FRotator ProjectileStartRotation;
+//
+//		TankAimingComponent->GetProjectileStart(ProjectileStartLocation, ProjectileStartRotation);
+//
+//		if (isReloaded && EnableFiringMode) {
+//			auto newProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluePrint, ProjectileStartLocation, ProjectileStartRotation);
+//			newProjectile->LaunchProjectile(LaunchSpeed);
+//			LastFireTime = FPlatformTime::Seconds();
+//		}
+//	}
 }
 
 

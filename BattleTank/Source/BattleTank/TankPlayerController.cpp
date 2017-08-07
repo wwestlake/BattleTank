@@ -19,28 +19,23 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardCrossHair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent != nullptr)) 
-	{
-		FoundAimingComponent(AimingComponent);
-	}
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent != nullptr)) { return; }
+	FoundAimingComponent(AimingComponent);
 }
 
 void ATankPlayerController::AimTowardCrossHair()
 {
-	if (!GetControlledTank()) return;
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent != nullptr)) { return; }
 	FVector hitLocation;
 	if (GetSightRayHitLocation(hitLocation)) 
 	{
-		GetControlledTank()->AimAt(hitLocation);
+		AimingComponent->AimAt(hitLocation);
 	}
 }
 

@@ -33,7 +33,7 @@ void UTankAimingComponent::GetProjectileStart(FVector& Location, FRotator& Rotat
 }
 
 
-void UTankAimingComponent::AimAt(FVector location, float LaunchSpeed) 
+void UTankAimingComponent::AimAt(FVector location) 
 {
 	if (ensure(Barrel != nullptr &&  Turret != nullptr))
 	{
