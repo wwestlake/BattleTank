@@ -58,6 +58,11 @@ protected:
 	bool EnableFiringMode = true;
 
 private:
+
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
@@ -68,5 +73,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBluePrint;
+
+	FVector currentAimDirection;
+
+	bool IsBarrelMoving();
 
 };

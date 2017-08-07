@@ -30,6 +30,7 @@ void ATankPlayerController::BeginPlay()
 
 void ATankPlayerController::AimTowardCrossHair()
 {
+	if (!ensure(GetPawn() != nullptr)) { return; }
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent != nullptr)) { return; }
 	FVector hitLocation;

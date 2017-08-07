@@ -18,6 +18,28 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+void UTankAimingComponent::BeginPlay()
+{
+	// so that first fire is after reload
+	LastFireTime = FPlatformTime::Seconds();
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if (!EnableFiringMode) {
+		FiringStatus = EFiringState::Reloading;
+	} else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeSeconds) {
+		FiringStatus = EFiringState::Reloading;
+	}
+	else if (IsBarrelMoving()) {
+		FiringStatus = EFiringState::Aiming;
+	}
+	else {
+		FiringStatus = EFiringState::Locked;
+	}
+}
+
+
 void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
 	Barrel = BarrelToSet;
@@ -52,9 +74,10 @@ void UTankAimingComponent::AimAt(FVector location)
 }
 
 
-void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection) 
-{
 
+void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection)
+{
+	currentAimDirection = aimDirection;
 	// find difference between current barrel rotation and aim direction
 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
@@ -67,16 +90,22 @@ void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection)
 	}
 }
 
+bool UTankAimingComponent::IsBarrelMoving() 
+{
+	auto barrelVector = Barrel->GetForwardVector();
+	return (! barrelVector.Equals(currentAimDirection, 0.1f));
+}
+
 void UTankAimingComponent::Fire()
 {
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeSeconds;
+	
 	
 	FVector ProjectileStartLocation;
 	FRotator ProjectileStartRotation;
 	
 	GetProjectileStart(ProjectileStartLocation, ProjectileStartRotation);
 	
-	if (isReloaded && EnableFiringMode) {
+	if ((FiringStatus != EFiringState::Reloading) && EnableFiringMode) {
 		auto newProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluePrint, ProjectileStartLocation, ProjectileStartRotation);
 		newProjectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
