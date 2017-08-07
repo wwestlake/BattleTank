@@ -18,6 +18,7 @@ enum class EFiringState : uint8
 
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -30,23 +31,42 @@ public:
 
 	void AimAt(FVector location);
 	
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
+	UFUNCTION(BlueprintCallable)
+	void Fire();
 
-	UFUNCTION(BlueprintCallable, Category = "Firing")
-	void GetProjectileStart(FVector& Location, FRotator& Rotation);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringStatus = EFiringState::Locked;
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+		void GetProjectileStart(FVector& Location, FRotator& Rotation);
+
+
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f;
+
+	// Maximum firing rate in seconds
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float MaxFiringRate = 3.0f;
+
+	// Maximum firing rate in seconds
+	UPROPERTY(EditAnyWhere, Category = "Firing")
+	bool EnableFiringMode = true;
 
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
 	void MoveBarrelTowards(FVector aimDirection);
+
+	float ReloadTimeSeconds = 3.0f;
+	double LastFireTime = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBluePrint;
 
 };
