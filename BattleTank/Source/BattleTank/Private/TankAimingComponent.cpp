@@ -69,16 +69,12 @@ void UTankAimingComponent::GetProjectileStart(FVector& Location, FRotator& Rotat
 
 void UTankAimingComponent::AimAt(FVector location) 
 {
-	if (ensure(Barrel != nullptr &&  Turret != nullptr))
-	{
+	if (ensure(Barrel != nullptr  && Turret != nullptr)) {
 		auto barrelLocation = Barrel->GetSocketLocation(FName("Projectile"));
-
 		FVector tossVelocity;
 		FVector aimDirection;
-
 		bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, tossVelocity, barrelLocation, location, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
-		if (bHaveAimSolution)
-		{
+		if (bHaveAimSolution) {
 			aimDirection = tossVelocity.GetSafeNormal();
 			MoveBarrelTowards(aimDirection);
 		}
@@ -116,8 +112,6 @@ bool UTankAimingComponent::IsBarrelMoving()
 
 void UTankAimingComponent::Fire()
 {
-	
-	
 	FVector ProjectileStartLocation;
 	FRotator ProjectileStartRotation;
 	
@@ -127,6 +121,6 @@ void UTankAimingComponent::Fire()
 		auto newProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluePrint, ProjectileStartLocation, ProjectileStartRotation);
 		newProjectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
-		AmmoRemaining -= 1;
+		AmmoRemaining--;
 	}
 }
