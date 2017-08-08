@@ -25,7 +25,7 @@ void UTrackComponent::ApplySidewaysForce()
 
 void UTrackComponent::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
-	DriveTrack();
+w	DriveTrack();
 	ApplySidewaysForce();
 	CurrentThrottle = 0;
 }
