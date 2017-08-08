@@ -48,17 +48,17 @@ protected:
 	void GetProjectileStart(FVector& Location, FRotator& Rotation);
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	int GetRemainingAmmo() const;
+	int32 GetRemainingAmmo() const;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f;
 
 	// Maximum firing rate in seconds
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float MaxFiringRate = 3.0f;
+	float ReloadTimeSeconds = 3.0f;
 
-	UPROPERTY(EditDefaultsOnly)
-	int AmmoInnitialLoad = 3;
+	UPROPERTY(EditDefaultsOnly, category = "Firing")
+	int32 AmmoInnitialLoad = 30;
 
 private:
 
@@ -71,7 +71,6 @@ private:
 
 	void MoveBarrelTowards(FVector aimDirection);
 
-	float ReloadTimeSeconds = 3.0f;
 	double LastFireTime = 0.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
@@ -80,7 +79,7 @@ private:
 	FVector currentAimDirection;
 
 	bool IsBarrelMoving();
-
-	int AmmoRemaining;
+	
+	int32 AmmoRemaining;
 
 };
