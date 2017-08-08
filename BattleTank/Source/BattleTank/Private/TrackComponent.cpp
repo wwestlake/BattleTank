@@ -1,35 +1,47 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TrackComponent.h"
+#include "Engine/World.h"
 
-
-
-void UTrackComponent::SetThrottle(float ThrottleSetting)
+UTrackComponent::UTrackComponent()
 {
+	PrimaryComponentTick.bCanEverTick = false;
+}
 
-	if (ReverseThrottle) {
-		Throttle = FMath::Clamp<float>(-ThrottleSetting, -1, 1);
-	}
-	else {
-		Throttle = FMath::Clamp<float>(ThrottleSetting, -1, 1);
-	}
+void UTrackComponent::BeginPlay() 
+{
+	OnComponentHit.AddDynamic(this, &UTrackComponent::OnHit);
+}
 
-	Throttle = FMath::Clamp<float>(Throttle, -1, 1);
 
-	CurrentForce = TrackMaxDrivingForce * Throttle;
+void UTrackComponent::ApplySidewaysForce()
+{
+	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	auto CorrectionAcceleration = -SlippageSpeed / GetWorld()->GetDeltaSeconds() * GetRightVector();
+	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+	auto CorrectionForce = TankRoot->GetMass() * CorrectionAcceleration / 2.0;
+	TankRoot->AddForce(CorrectionForce);
+}
 
-	auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
+void UTrackComponent::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
+{
+	DriveTrack();
+	ApplySidewaysForce();
+	CurrentThrottle = 0;
+}
+
+
+void UTrackComponent::SetThrottle(float Throttle)
+{
+	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
+}
+
+
+void UTrackComponent::DriveTrack()
+{
+	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
 	auto ForceLocation = GetComponentLocation() + GetForwardVector() * 500;
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
-
-
 }
-
-void UTrackComponent::SetReverse(bool ReverseThrottleSetting)
-{
-	ReverseThrottle = ReverseThrottleSetting;
-}
-
 

@@ -18,15 +18,26 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetThrottle(float ThrottleSetting);
 
-	UFUNCTION(BlueprintCallable)
-		void SetReverse(bool ReverseThrottleSetting);
-
 	// Max force for this track in Newtons
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	float TrackMaxDrivingForce = 400000;
 
+
+
 private:
-	float Throttle = 0.0f;
+
+	UTrackComponent();
+	virtual void BeginPlay() override;
+
+	void ApplySidewaysForce();
+
+	float CurrentThrottle = 0.0f;
 	float CurrentForce = 0.0f;
 	bool ReverseThrottle = false;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	void DriveTrack();
+
 };
