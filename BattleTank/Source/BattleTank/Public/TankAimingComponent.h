@@ -13,7 +13,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -41,11 +42,13 @@ protected:
 	EFiringState FiringStatus = EFiringState::Locked;
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
+	void Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-		void GetProjectileStart(FVector& Location, FRotator& Rotation);
+	void GetProjectileStart(FVector& Location, FRotator& Rotation);
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int GetRemainingAmmo() const;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f;
@@ -54,9 +57,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float MaxFiringRate = 3.0f;
 
-	// Maximum firing rate in seconds
-	UPROPERTY(EditAnyWhere, Category = "Firing")
-	bool EnableFiringMode = true;
+	UPROPERTY(EditDefaultsOnly)
+	int AmmoInnitialLoad = 3;
 
 private:
 
@@ -78,5 +80,7 @@ private:
 	FVector currentAimDirection;
 
 	bool IsBarrelMoving();
+
+	int AmmoRemaining;
 
 };

@@ -22,14 +22,14 @@ void UTankAimingComponent::BeginPlay()
 {
 	// so that first fire is after reload
 	LastFireTime = FPlatformTime::Seconds();
+	AmmoRemaining = AmmoInnitialLoad;
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (!EnableFiringMode) {
-		FiringStatus = EFiringState::Reloading;
+	if (AmmoRemaining <= 0) {
+		FiringStatus = EFiringState::OutOfAmmo;
 	} else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeSeconds) {
 		FiringStatus = EFiringState::Reloading;
 	}
@@ -45,6 +45,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 EFiringState UTankAimingComponent::GetFiringState() const
 {
 	return FiringStatus;
+}
+
+int UTankAimingComponent::GetRemainingAmmo() const
+{
+	return AmmoRemaining;
 }
 
 void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
@@ -96,7 +101,8 @@ void UTankAimingComponent::MoveBarrelTowards(FVector aimDirection)
 		if (FMath::Abs(DeltaRotator.Yaw) < 180) {
 			Turret->Rotate(DeltaRotator.Yaw);
 		}
-		else {
+		else // avoid going the long way around
+		{
 			Turret->Rotate(-DeltaRotator.Yaw);
 		}
 	}
@@ -117,9 +123,10 @@ void UTankAimingComponent::Fire()
 	
 	GetProjectileStart(ProjectileStartLocation, ProjectileStartRotation);
 	
-	if ((FiringStatus != EFiringState::Reloading) && EnableFiringMode) {
+	if (FiringStatus == EFiringState::Locked || FiringStatus == EFiringState::Aiming) {
 		auto newProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBluePrint, ProjectileStartLocation, ProjectileStartRotation);
 		newProjectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+		AmmoRemaining -= 1;
 	}
 }
