@@ -3,6 +3,13 @@
 #include "Tank.h"
 #include "GameFramework/Actor.h"
 
+float ATank::GetHealthPercent() const
+{
+	return(float)CurrentHealth / (float)StartingHealth;
+}
+
+
+
 // Sets default values
 ATank::ATank()
 {
@@ -10,17 +17,28 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+	CurrentHealth = StartingHealth;
+}
+
+
 float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+//	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	auto damage = FMath::Clamp<float>(DamageAmount, 0.0f, Health);
+	int32 DamagePoints = FMath::Clamp<int32>(FPlatformMath::RoundToInt(DamageAmount), 0, CurrentHealth);
+	int32 prevHealth = CurrentHealth;
+	CurrentHealth -= DamagePoints;
 
-	UE_LOG(LogTemp, Warning, TEXT("Hit: %f - %f"), Health, damage)
+	if (CurrentHealth <= 0) 
+	{
+		OnDeath.Broadcast();
+	}
 
-	Health -= damage;
-
-	return Health;
+	return DamagePoints;
 }
 
 
